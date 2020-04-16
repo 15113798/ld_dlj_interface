@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.generator.dao.DljIndustryDataDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.generator.entity.DljIndustryDataEntity" id="dljIndustryDataMap">
+        <result property="id" column="id"/>
+        <result property="industryId" column="industry_id"/>
+        <result property="userNum" column="user_num"/>
+        <result property="installedCapacity" column="installed_capacity"/>
+        <result property="eleConMonth" column="ele_con_month"/>
+        <result property="eleConOldYearMonth" column="ele_con_old_year_month"/>
+        <result property="compareMonth" column="compare_month"/>
+        <result property="eleConYear" column="ele_con_year"/>
+        <result property="eleConOldYear" column="ele_con_old_year"/>
+        <result property="assYear" column="ass_year"/>
+        <result property="industryCapUtil" column="industry_cap_util"/>
+        <result property="recordTime" column="record_time"/>
+    </resultMap>
+
+
+</mapper>

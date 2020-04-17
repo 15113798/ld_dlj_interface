@@ -13,6 +13,9 @@
     <el-form-item label="行业id" prop="industryId">
       <el-input v-model="dataForm.industryId" placeholder="行业id"></el-input>
     </el-form-item>
+    <el-form-item label="排序" prop="sort">
+      <el-input v-model="dataForm.sort" placeholder="排序"></el-input>
+    </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -30,7 +33,8 @@
           id: 0,
           name: '',
           pid: '',
-          industryId: ''
+          industryId: '',
+          sort: ''
         },
         dataRule: {
           name: [
@@ -41,6 +45,9 @@
           ],
           industryId: [
             { required: true, message: '行业id不能为空', trigger: 'blur' }
+          ],
+          sort: [
+            { required: true, message: '排序不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -61,6 +68,7 @@
                 this.dataForm.name = data.dljIndustryMenu.name
                 this.dataForm.pid = data.dljIndustryMenu.pid
                 this.dataForm.industryId = data.dljIndustryMenu.industryId
+                this.dataForm.sort = data.dljIndustryMenu.sort
               }
             })
           }
@@ -77,7 +85,8 @@
                 'id': this.dataForm.id || undefined,
                 'name': this.dataForm.name,
                 'pid': this.dataForm.pid,
-                'industryId': this.dataForm.industryId
+                'industryId': this.dataForm.industryId,
+                'sort': this.dataForm.sort
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

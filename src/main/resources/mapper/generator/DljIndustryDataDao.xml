@@ -6,7 +6,7 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="io.renren.modules.generator.entity.DljIndustryDataEntity" id="dljIndustryDataMap">
         <result property="id" column="id"/>
-        <result property="industryId" column="industry_id"/>
+        <result property="industryName" column="industry_name"/>
         <result property="userNum" column="user_num"/>
         <result property="installedCapacity" column="installed_capacity"/>
         <result property="eleConMonth" column="ele_con_month"/>
@@ -17,6 +17,7 @@
         <result property="assYear" column="ass_year"/>
         <result property="industryCapUtil" column="industry_cap_util"/>
         <result property="recordTime" column="record_time"/>
+        <result property="chainRatio" column="chain_ratio"/>
     </resultMap>
 
 

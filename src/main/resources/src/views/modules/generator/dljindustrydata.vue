@@ -29,7 +29,7 @@
         label="">
       </el-table-column>
       <el-table-column
-        prop="industryId"
+        prop="industryName"
         header-align="center"
         align="center"
         label="行业id">
@@ -93,6 +93,12 @@
         header-align="center"
         align="center"
         label="记录时间">
+      </el-table-column>
+      <el-table-column
+        prop="chainRatio"
+        header-align="center"
+        align="center"
+        label="环比">
       </el-table-column>
       <el-table-column
         fixed="right"

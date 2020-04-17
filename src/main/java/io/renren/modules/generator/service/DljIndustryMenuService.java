@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author chenshun
  * @email sunlightcs@gmail.com
- * @date 2020-04-17 00:43:54
+ * @date 2020-04-17 15:05:46
  */
 public interface DljIndustryMenuService extends IService<DljIndustryMenuEntity> {
 

@@ -18,13 +18,19 @@ securityDefinitions:
 
 #定义接口数据
 paths:
-  /sys/login:
+  /menu/list:
     post:
       tags:
         - 菜單管理
-      summary: 菜單列表
+      summary: 获取菜单
       produces:
         - application/json
+      parameters:
+        - name: pid
+          description: 父级id，左侧菜单用0.右边tab传左侧导航栏id，如果右侧有上下布局，则依次往下绑定了关系
+          in: query
+          type: string
+          required: true
       responses:
         '200':
           schema:

@@ -4,8 +4,8 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="行业id" prop="industryId">
-      <el-input v-model="dataForm.industryId" placeholder="行业id"></el-input>
+    <el-form-item label="行业id" prop="industryName">
+      <el-input v-model="dataForm.industryName" placeholder="行业id"></el-input>
     </el-form-item>
     <el-form-item label="用户数" prop="userNum">
       <el-input v-model="dataForm.userNum" placeholder="用户数"></el-input>
@@ -37,6 +37,9 @@
     <el-form-item label="记录时间" prop="recordTime">
       <el-input v-model="dataForm.recordTime" placeholder="记录时间"></el-input>
     </el-form-item>
+    <el-form-item label="环比" prop="chainRatio">
+      <el-input v-model="dataForm.chainRatio" placeholder="环比"></el-input>
+    </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -52,7 +55,7 @@
         visible: false,
         dataForm: {
           id: 0,
-          industryId: '',
+          industryName: '',
           userNum: '',
           installedCapacity: '',
           eleConMonth: '',
@@ -62,10 +65,11 @@
           eleConOldYear: '',
           assYear: '',
           industryCapUtil: '',
-          recordTime: ''
+          recordTime: '',
+          chainRatio: ''
         },
         dataRule: {
-          industryId: [
+          industryName: [
             { required: true, message: '行业id不能为空', trigger: 'blur' }
           ],
           userNum: [
@@ -97,6 +101,9 @@
           ],
           recordTime: [
             { required: true, message: '记录时间不能为空', trigger: 'blur' }
+          ],
+          chainRatio: [
+            { required: true, message: '环比不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -114,7 +121,7 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.industryId = data.dljIndustryData.industryId
+                this.dataForm.industryName = data.dljIndustryData.industryName
                 this.dataForm.userNum = data.dljIndustryData.userNum
                 this.dataForm.installedCapacity = data.dljIndustryData.installedCapacity
                 this.dataForm.eleConMonth = data.dljIndustryData.eleConMonth
@@ -125,6 +132,7 @@
                 this.dataForm.assYear = data.dljIndustryData.assYear
                 this.dataForm.industryCapUtil = data.dljIndustryData.industryCapUtil
                 this.dataForm.recordTime = data.dljIndustryData.recordTime
+                this.dataForm.chainRatio = data.dljIndustryData.chainRatio
               }
             })
           }
@@ -139,7 +147,7 @@
               method: 'post',
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
-                'industryId': this.dataForm.industryId,
+                'industryName': this.dataForm.industryName,
                 'userNum': this.dataForm.userNum,
                 'installedCapacity': this.dataForm.installedCapacity,
                 'eleConMonth': this.dataForm.eleConMonth,
@@ -149,7 +157,8 @@
                 'eleConOldYear': this.dataForm.eleConOldYear,
                 'assYear': this.dataForm.assYear,
                 'industryCapUtil': this.dataForm.industryCapUtil,
-                'recordTime': this.dataForm.recordTime
+                'recordTime': this.dataForm.recordTime,
+                'chainRatio': this.dataForm.chainRatio
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

@@ -12,7 +12,7 @@ import lombok.Data;
  * 
  * @author chenshun
  * @email sunlightcs@gmail.com
- * @date 2020-04-17 00:43:54
+ * @date 2020-04-17 15:18:41
  */
 @Data
 @TableName("dlj_industry_data")
@@ -27,7 +27,7 @@ public class DljIndustryDataEntity implements Serializable {
 	/**
 	 * 行业id
 	 */
-	private Integer industryId;
+	private String industryName;
 	/**
 	 * 用户数
 	 */
@@ -68,5 +68,9 @@ public class DljIndustryDataEntity implements Serializable {
 	 * 记录时间
 	 */
 	private Date recordTime;
+	/**
+	 * 环比
+	 */
+	private String chainRatio;
 
 }

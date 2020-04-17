@@ -25,7 +25,7 @@ public class DljIndustryDataEntity implements Serializable {
 	@TableId
 	private Integer id;
 	/**
-	 * 行业id
+	 * 行业名称
 	 */
 	private String industryName;
 	/**
@@ -67,7 +67,7 @@ public class DljIndustryDataEntity implements Serializable {
 	/**
 	 * 记录时间
 	 */
-	private Date recordTime;
+	private String recordTime;
 	/**
 	 * 环比
 	 */

@@ -37,6 +37,75 @@ paths:
             $ref: '#/definitions/R'
 
 
+  /industryClass/getData:
+    post:
+      tags:
+        - 行业分类模块接口
+      summary: 基础数据：当前用户数，同比，环比，用户量，装机容量，电量，产能利用率
+      produces:
+        - application/json
+      parameters:
+        - name: industryId
+          description: 行业id
+          in: query
+          type: string
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+
+
+  /industryClass/getDisData:
+    post:
+      tags:
+        - 行业分类模块接口
+      summary: 折现图数据
+      produces:
+        - application/json
+      parameters:
+        - name: industryId
+          description: 行业id
+          in: query
+          type: string
+          required: true
+        - name: type
+          description: 类型 1.用户量 2.装机容量 3.电量 4.产能利用率
+          in: query
+          type: string
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+
+
+  /industryClass/getLastYearEleCon:
+    post:
+      tags:
+        - 行业分类模块接口
+      summary: 上年度居民用电比例
+      produces:
+        - application/json
+      parameters:
+        - name: startTime
+          description: 开始时间 YYYY 数据从2017年开始。如果查询的是2017年，那么开始时间和结束时间就是2017-2018
+          in: query
+          type: string
+          required: true
+        - name: endTime
+          description: 结束时间 YYYY
+          in: query
+          type: string
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
 
 
 

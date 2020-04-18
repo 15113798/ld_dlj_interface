@@ -150,9 +150,9 @@ paths:
     post:
       tags:
         - 高耗能行业产能利用率情况模块接口
-        summary: 折线图数据。接口同行业分类模块折现图接口一致，请求路径也一致。此接口路径只做api提示用
-        produces:
-          - application/json
+      summary: 折线图数据。接口同行业分类模块折现图接口一致，请求路径也一致。此接口路径只做api提示用
+      produces:
+        - application/json
       responses:
         '200':
           schema:

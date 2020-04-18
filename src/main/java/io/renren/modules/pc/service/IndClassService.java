@@ -122,51 +122,62 @@ public class IndClassService {
         List<DljIndustryEntity> list= industryService.list(wrapper);
         DljIndustryEntity indEntity = list.get(0);
 
-        //通过行业去获取所有的list，然后获取到list拼接折线图的数据
-        QueryWrapper dataWrapper = new QueryWrapper();
-        dataWrapper.eq("industry_name",indEntity.getOverName());
-        List<DljIndustryDataEntity> dataList = service.list(dataWrapper);
-        if(dataList != null){
-            String typeName = "";
+        //通过行业名称去数据表中获取该行业的年份分组
+        String overName = indEntity.getOverName();
+        QueryWrapper qw = new QueryWrapper();
+        qw.eq("industry_name",overName);
+        qw.groupBy("record_time");
+        List<DljIndustryDataEntity>dataList = service.list(wrapper);
 
-            if(type.equals("1")){
-                typeName = "用户量";
-            }else if(type.equals("2")){
-                typeName = "装机容量";
-            }else if(type.equals("3")){
-                typeName = "电量";
-            }else{
-                typeName = "产能利用率";
-            }
+        String typeName = "";
 
-            //分组
-            List<String> legend = new ArrayList<String>();
-            legend.add(typeName);
-
-            List<String> category= new ArrayList<>();
-            List<String> dataSerList = new ArrayList<>();
-            for (DljIndustryDataEntity entity : dataList) {
-                category.add(entity.getRecordTime());
-                String dataStr = "";
-                if(type.equals("1")){
-                    dataStr = entity.getUserNum();
-                }else if(type.equals("2")){
-                    dataStr = entity.getInstalledCapacity();
-                }else if(type.equals("3")){
-                    dataStr = entity.getEleConMonth();
-                }else{
-                    dataStr = entity.getIndustryCapUtil();
-                }
-                dataSerList.add(dataStr);
-            }
-
-            List<Series> series = new ArrayList<>();//纵坐标
-            series.add(new Series(typeName, "line",dataSerList));
-
-            EchartData data=new EchartData(legend, category, series);
-            return data;
+        if(type.equals("1")){
+            typeName = "用户量";
+        }else if(type.equals("2")){
+            typeName = "装机容量";
+        }else if(type.equals("3")){
+            typeName = "电量";
+        }else{
+            typeName = "产能利用率";
         }
 
-        return null;
+        //分组
+        List<String> legend = new ArrayList<String>();
+        legend.add(typeName);
+
+
+        List<String> category= new ArrayList<>();
+        List<String> dataSerList = new ArrayList<>();
+        BigDecimal totalBig = new BigDecimal(0);
+        for (DljIndustryDataEntity dataEntity : dataList){
+
+            String year = dataEntity.getRecordTime().split("-")[0];
+            category.add(year);
+            //然后通过行业和年份模糊查询可以获取到所有该行业该年的数据
+            QueryWrapper fw = new QueryWrapper();
+            fw.eq("industry_name",overName);
+            fw.like("record_time",year);
+            List<DljIndustryDataEntity>dList = service.list(fw);
+            for (DljIndustryDataEntity dEntity:dList){
+                if(type.equals("1")){
+                    totalBig = totalBig.add(new BigDecimal(dEntity.getUserNum()));
+                }else if(type.equals("2")){
+                    totalBig = totalBig.add(new BigDecimal(dEntity.getInstalledCapacity()));
+                }else if(type.equals("3")){
+                    totalBig = totalBig.add(new BigDecimal(dEntity.getEleConMonth()));
+                }else{
+                    totalBig = totalBig.add(new BigDecimal(dEntity.getIndustryCapUtil()));
+                }
+            }
+
+            dataSerList.add(totalBig.toString());
+
+        }
+        List<Series> series = new ArrayList<>();//纵坐标
+        series.add(new Series(typeName, "line",dataSerList));
+
+        EchartData data=new EchartData(legend, category, series);
+
+        return data;
     }
 }

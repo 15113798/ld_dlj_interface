@@ -160,6 +160,111 @@ paths:
 
 
 
+  #第一产业产能利用率情况
+  /priIndCon/getData:
+    post:
+      tags:
+        - 第一产业产能利用率情况模块接口
+      summary: 基础数据。接口同行业分类模块基础数据接口一致，请求路径也一致。此接口路径只做api提示用
+      produces:
+        - application/json
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+
+  /priIndCon/getDisData:
+    post:
+      tags:
+        - 第一产业产能利用率情况模块接口
+      summary: 折线图数据。接口同行业分类模块折现图接口一致，请求路径也一致。此接口路径只做api提示用
+      produces:
+        - application/json
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+
+
+
+  #第三产业产能利用率情况
+  /threeIndCon/getData:
+    post:
+      tags:
+        - 第三产业产能利用率情况模块接口
+      summary: 基础数据。接口同行业分类模块基础数据接口一致，请求路径也一致。此接口路径只做api提示用
+      produces:
+        - application/json
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+
+  /threeIndCon/getDisData:
+    post:
+      tags:
+        - 第三产业产能利用率情况模块接口
+      summary: 折线图数据。接口同行业分类模块折现图接口一致，请求路径也一致。此接口路径只做api提示用
+      produces:
+        - application/json
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+
+
+
+
+  #各行业产能利用率情况
+  /varIndCon/getIndList:
+    post:
+      tags:
+        - 各行业产能利用率情况模块接口
+      summary: 获取所有行业树结构
+      produces:
+        - application/json
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+
+  /varIndCon/getData:
+    post:
+      tags:
+        - 各行业产能利用率情况模块接口
+      summary: 基础数据。接口同行业分类模块基础数据接口一致，请求路径也一致。此接口路径只做api提示用
+      produces:
+        - application/json
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+
+  /varIndCon/getDisData:
+    post:
+      tags:
+        - 各行业产能利用率情况模块接口
+      summary: 折线图数据。接口同行业分类模块折现图接口一致，请求路径也一致。此接口路径只做api提示用
+      produces:
+        - application/json
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
 
 
 

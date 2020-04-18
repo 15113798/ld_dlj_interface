@@ -37,4 +37,6 @@ public class DljIndustryEntity implements Serializable {
 	 */
 	private Integer pid;
 
+	private Integer is_ind;
+
 }

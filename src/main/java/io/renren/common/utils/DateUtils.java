@@ -178,4 +178,17 @@ public class DateUtils {
         return accDate;
     }
 
+
+
+
+    public static String getLastYear() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        c.setTime(new Date());
+        c.add(Calendar.YEAR, -1);
+        Date y = c.getTime();
+        String year = format.format(y);
+        return year;
+    }
+
 }

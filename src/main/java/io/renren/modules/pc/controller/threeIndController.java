@@ -9,7 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("threeIndCon")
-public class threeIndController {
+public class ThreeIndController {
 
     @RequestMapping("/getData")
     public R getData(@RequestParam Map<String, Object> params){

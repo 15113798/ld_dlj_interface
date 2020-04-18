@@ -37,22 +37,71 @@ public class IndustryClassController {
     @RequestMapping("/getData")
     public R getData(@RequestParam Map<String, Object> params){
         String  industryId = String.valueOf(params.get("industryId"));
+        String  timeType = String.valueOf(params.get("timeType"));
 
-        //数据统一是以查上月为准
-        String DATE_PATTERN = "yyyy-MM-dd";
-        String lastMonth = DateUtils.getLastMonth();
-        //通过行业id获取行业名称
-        QueryWrapper wrapper = new QueryWrapper();
-        wrapper.eq("id",industryId);
-        List<DljIndustryEntity> list= industryService.list(wrapper);
-        DljIndustryEntity indEntity = list.get(0);
+        DljIndustryDataEntity dataEntity = new DljIndustryDataEntity();
+        if(timeType.equals("1")){
+            //按年的话就是查询该行业上一年的数据
+            //通过行业id获取行业名称
+            QueryWrapper wrapper = new QueryWrapper();
+            wrapper.eq("id",industryId);
+            List<DljIndustryEntity> list= industryService.list(wrapper);
+            DljIndustryEntity indEntity = list.get(0);
 
-        //通过行业和时间去获取准确的一条消息
-        QueryWrapper dataWrapper = new QueryWrapper();
-        dataWrapper.eq("record_time",lastMonth);
-        dataWrapper.eq("industry_name",indEntity.getOverName());
-        List<DljIndustryDataEntity> dataList = service.list(dataWrapper);
-        DljIndustryDataEntity dataEntity =  dataList.get(0);
+            //通过行业和时间去获取该年数据的集合
+            String time = DateUtils.getLastYear();
+
+            QueryWrapper dataWrapper = new QueryWrapper();
+            dataWrapper.like("record_time",time);
+            dataWrapper.eq("industry_name",indEntity.getOverName());
+            List<DljIndustryDataEntity> dataList = service.list(dataWrapper);
+            if(dataList == null || dataList.size() ==0){
+                return R.ok().put("data", null);
+            }
+
+            //遍历一下需要的基础数据
+            BigDecimal totalUserNum = new BigDecimal(0);
+            BigDecimal totalInstalledCapacity = new BigDecimal(0);
+            BigDecimal totalEleConMonth = new BigDecimal(0);
+            BigDecimal totalIndustryCapUtil = new BigDecimal(0);
+
+            for (DljIndustryDataEntity entity :dataList) {
+                String userNum = entity.getUserNum();
+                String installedCap = entity.getInstalledCapacity();
+                String eleConMonth = entity.getEleConMonth();
+                String induCapUtil = entity.getIndustryCapUtil();
+                totalUserNum = totalUserNum.add(new BigDecimal(userNum));
+                totalInstalledCapacity = totalInstalledCapacity.add(new BigDecimal(installedCap));
+                totalEleConMonth = totalEleConMonth.add(new BigDecimal(eleConMonth));
+                totalIndustryCapUtil = totalIndustryCapUtil.add(new BigDecimal(induCapUtil));
+            }
+
+            dataEntity.setUserNum(totalUserNum.toString());
+            dataEntity.setInstalledCapacity(totalInstalledCapacity.toString());
+            dataEntity.setEleConMonth(totalEleConMonth.toString());
+            dataEntity.setIndustryCapUtil(totalIndustryCapUtil.divide(new BigDecimal(12),2, BigDecimal.ROUND_HALF_UP).toString());
+        }else{
+            //按月的话就是查询指定月的数据
+            //即上个月的数据
+            String lastMonth = DateUtils.getLastMonth();
+
+            //通过行业id获取行业名称
+            QueryWrapper wrapper = new QueryWrapper();
+            wrapper.eq("id",industryId);
+            List<DljIndustryEntity> list= industryService.list(wrapper);
+            DljIndustryEntity indEntity = list.get(0);
+
+            //通过行业和时间去获取准确的一条消息
+            QueryWrapper dataWrapper = new QueryWrapper();
+            dataWrapper.eq("record_time",lastMonth);
+            dataWrapper.eq("industry_name",indEntity.getOverName());
+            List<DljIndustryDataEntity> dataList = service.list(dataWrapper);
+            if(dataList != null){
+                dataEntity =  dataList.get(0);
+            }
+        }
+
+
         return R.ok().put("data", dataEntity);
     }
 

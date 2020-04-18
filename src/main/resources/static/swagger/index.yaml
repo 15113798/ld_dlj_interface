@@ -50,6 +50,12 @@ paths:
           in: query
           type: string
           required: true
+        - name: timeType
+          description:  查询时间类型 1按年，2按月。
+          in: query
+          type: string
+          required: true
+
       responses:
         '200':
           schema:
@@ -77,10 +83,11 @@ paths:
           type: string
           required: true
         - name: timeType
-          description: 查询标准 1是按月查，2是按年查
+          description: 查询时间类型 1按年，2按月。
           in: query
           type: string
           required: true
+
       responses:
         '200':
           schema:
@@ -222,8 +229,20 @@ paths:
 
 
 
-
   #各行业产能利用率情况
+  /varIndCon/getDisData:
+    post:
+      tags:
+        - 各行业产能利用率情况模块接口
+      summary: 折线图数据。接口同行业分类模块折现图接口一致，请求路径也一致。此接口路径只做api提示用
+      produces:
+        - application/json
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
   /varIndCon/getIndList:
     post:
       tags:
@@ -235,7 +254,6 @@ paths:
         '200':
           schema:
             $ref: '#/definitions/R'
-
 
 
   /varIndCon/getData:
@@ -252,10 +270,24 @@ paths:
 
 
 
-  /varIndCon/getDisData:
+
+  #大用户业扩报装投资建议等级
+  /BigUserIndExpanCon/getIndList:
     post:
       tags:
-        - 各行业产能利用率情况模块接口
+        - 大用户业扩报装投资建议等级模块接口
+      summary: 获取所有行业树结构。同各行业产能利用率情况模块一样，请求路径也一致。此接口路径只做api提示用
+      produces:
+        - application/json
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+  /bigUserIndExpanCon/getDisData:
+    post:
+      tags:
+        - 大用户业扩报装投资建议等级模块接口
       summary: 折线图数据。接口同行业分类模块折现图接口一致，请求路径也一致。此接口路径只做api提示用
       produces:
         - application/json
@@ -263,6 +295,35 @@ paths:
         '200':
           schema:
             $ref: '#/definitions/R'
+
+  /bigUserIndExpanCon/getData:
+    post:
+      tags:
+        - 大用户业扩报装投资建议等级模块接口
+      summary: 基础数据。接口同行业分类模块基础数据接口一致，请求路径也一致。此接口路径只做api提示用
+      produces:
+        - application/json
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+
+  /BigUserIndExpanCon/getInvSug:
+    post:
+      tags:
+        - 大用户业扩报装投资建议等级模块接口
+      summary: 用户业扩报装投资建议等级
+      produces:
+        - application/json
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+
 
 
 

@@ -9,7 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("priIndCon")
-public class priIndController {
+public class PriIndController {
 
     @RequestMapping("/getData")
     public R getData(@RequestParam Map<String, Object> params){

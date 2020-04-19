@@ -183,7 +183,7 @@ public class DateUtils {
 
     public static String getLastYear() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy");
         c.setTime(new Date());
         c.add(Calendar.YEAR, -1);
         Date y = c.getTime();

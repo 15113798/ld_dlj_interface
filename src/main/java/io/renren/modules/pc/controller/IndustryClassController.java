@@ -10,6 +10,7 @@ import io.renren.modules.generator.entity.DljIndustryMenuEntity;
 import io.renren.modules.generator.service.DljIndustryDataService;
 import io.renren.modules.generator.service.DljIndustryMenuService;
 import io.renren.modules.generator.service.DljIndustryService;
+import io.renren.modules.pc.common.CommonService;
 import io.renren.modules.pc.entity.EchartData;
 import io.renren.modules.pc.entity.LastYearEleConEntity;
 import io.renren.modules.pc.entity.Series;
@@ -30,6 +31,8 @@ public class IndustryClassController {
     private DljIndustryService industryService;
     @Autowired
     private IndClassService indClassService;
+    @Autowired
+    private CommonService commonService;
 
 
 
@@ -73,13 +76,13 @@ public class IndustryClassController {
                 totalUserNum = totalUserNum.add(new BigDecimal(userNum));
                 totalInstalledCapacity = totalInstalledCapacity.add(new BigDecimal(installedCap));
                 totalEleConMonth = totalEleConMonth.add(new BigDecimal(eleConMonth));
-                totalIndustryCapUtil = totalIndustryCapUtil.add(new BigDecimal(induCapUtil));
+                totalIndustryCapUtil = totalIndustryCapUtil.add(new BigDecimal(induCapUtil.split("%")[0]));
             }
 
             dataEntity.setUserNum(totalUserNum.toString());
             dataEntity.setInstalledCapacity(totalInstalledCapacity.toString());
             dataEntity.setEleConMonth(totalEleConMonth.toString());
-            dataEntity.setIndustryCapUtil(totalIndustryCapUtil.divide(new BigDecimal(12),2, BigDecimal.ROUND_HALF_UP).toString());
+            dataEntity.setIndustryCapUtil(commonService.calIndCapUtil(totalEleConMonth.toString(),totalInstalledCapacity.toString(),2));
         }else{
             //按月的话就是查询指定月的数据
             //即上个月的数据
@@ -181,9 +184,26 @@ public class IndustryClassController {
 
         List<DljIndustryDataEntity> list= service.list(wrapper);
         List<DljIndustryDataEntity> dataList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+
+
+        int count = 0 ;
+        for (int i = 0; i < list.size(); i++) {
+            if(count == 5){
+                break;
+            }
             DljIndustryDataEntity entity = list.get(i);
-            dataList.add(entity);
+            QueryWrapper wp = new QueryWrapper();
+            wp.eq("over_name",entity.getIndustryName());
+            wp.eq("is_ind",1);
+
+            List<DljIndustryEntity>indList=industryService.list(wp);
+            if(indList != null && indList.size() !=0 ){
+                DljIndustryEntity industryEntity = indList.get(0);
+                String indName = industryEntity.getName();
+                entity.setIndustryName(indName);
+                dataList.add(entity);
+                count++;
+            }
         }
         return R.ok().put("data", dataList);
     }

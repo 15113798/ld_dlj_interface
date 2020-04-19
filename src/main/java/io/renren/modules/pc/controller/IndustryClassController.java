@@ -150,15 +150,23 @@ public class IndustryClassController {
             BigDecimal totalOnePro = indClassService.getTotalData(zdlList1);
             BigDecimal totalTwoPro = indClassService.getTotalData(zdlList2);
             BigDecimal totalThreePro = indClassService.getTotalData(zdlList3);
-            BigDecimal totalResidentPro = indClassService.getTotalData(zdlList4);
 
             //测试总和是否和总量一致 测试通过
             //BigDecimal testTotal = totalOnePro.add(totalTwoPro).add(totalThreePro).add(totalResidentPro);
 
             //得到占比
             BigDecimal oneProduction = totalOnePro.divide(totalPro,4, BigDecimal.ROUND_HALF_UP);
+            if(oneProduction.compareTo(new BigDecimal(0)) == 1 && oneProduction.compareTo(new BigDecimal(0.01)) == -1){
+                oneProduction = new BigDecimal(0.01);
+            }
             BigDecimal twoProduction = totalTwoPro.divide(totalPro,4, BigDecimal.ROUND_HALF_UP);
+            if(twoProduction.compareTo(new BigDecimal(0)) == 1 && twoProduction.compareTo(new BigDecimal(0.01)) == -1){
+                twoProduction = new BigDecimal(0.01);
+            }
             BigDecimal threeProduction = totalThreePro.divide(totalPro,4, BigDecimal.ROUND_HALF_UP);
+            if(threeProduction.compareTo(new BigDecimal(0)) == 1 && threeProduction.compareTo(new BigDecimal(0.01)) == -1){
+                threeProduction = new BigDecimal(0.01);
+            }
             BigDecimal residentProduction = new BigDecimal(1).subtract(oneProduction).subtract(twoProduction).subtract(threeProduction);
 
             entity.setOneProduction(oneProduction);

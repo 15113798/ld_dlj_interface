@@ -10,13 +10,14 @@ import java.util.Map;
 
 @Component
 public class MenuTreeUtil {
-
     //已经被buildTree的list集合
     private List<DljIndustryEntity> menuCommon;
-    //返回给前端的NewTree List集合
-    private List<Object> list = new ArrayList<Object>();
+
 
     public List<Object> menuList(List<DljIndustryEntity> menu){
+
+        //返回给前端的NewTree List集合
+        List<Object> list = new ArrayList<Object>();
         this.menuCommon = menu;
 
         // 通过遍历menu，找到父节点为0的节点，它是顶级父节点

@@ -65,6 +65,7 @@ public class IndClassService {
         //通过行业去获取所有的list，然后获取到list拼接折线图的数据
         QueryWrapper dataWrapper = new QueryWrapper();
         dataWrapper.eq("industry_name",indEntity.getOverName());
+        dataWrapper.orderByAsc("record_time");
         List<DljIndustryDataEntity> dataList = service.list(dataWrapper);
         if(dataList != null){
             String typeName = "";
@@ -95,7 +96,7 @@ public class IndClassService {
                 }else if(type.equals("3")){
                     dataStr = entity.getEleConMonth();
                 }else{
-                    dataStr = entity.getIndustryCapUtil();
+                    dataStr = entity.getIndustryCapUtil().split("%")[0];
                 }
                 dataSerList.add(dataStr);
             }
@@ -127,7 +128,7 @@ public class IndClassService {
         QueryWrapper qw = new QueryWrapper();
         qw.eq("industry_name",overName);
         qw.groupBy("record_time");
-        List<DljIndustryDataEntity>dataList = service.list(wrapper);
+        List<DljIndustryDataEntity>dataList = service.list(qw);
 
         String typeName = "";
 

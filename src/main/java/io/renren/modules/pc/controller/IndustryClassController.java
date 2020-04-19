@@ -111,9 +111,9 @@ public class IndustryClassController {
     public R getDisData(@RequestParam Map<String, Object> params){
         String  timeType = String.valueOf(params.get("timeType"));
         if("1".equals(timeType)){
-            return R.ok().put("data",indClassService.getDisDataByMonth(params));
-        }else if("2".equals(timeType)){
             return R.ok().put("data",indClassService.getDisDataByYear(params));
+        }else if("2".equals(timeType)){
+            return R.ok().put("data",indClassService.getDisDataByMonth(params));
         }
 
         return R.ok().put("data", null);

@@ -62,6 +62,30 @@ paths:
             $ref: '#/definitions/R'
 
 
+  /common/savaDate:
+    post:
+      tags:
+        - 公用接口
+      summary: 入库excel
+      produces:
+        - application/json
+      parameters:
+        - name: url
+          description: 路径
+          in: query
+          type: string
+          required: true
+        - name: time
+          description: 时间 2020-03
+          in: query
+          type: string
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
 
 
   /industryClass/getDisData:

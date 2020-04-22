@@ -61,33 +61,6 @@ paths:
           schema:
             $ref: '#/definitions/R'
 
-
-  /common/savaDate:
-    post:
-      tags:
-        - 公用接口
-      summary: 入库excel
-      produces:
-        - application/json
-      parameters:
-        - name: url
-          description: 路径
-          in: query
-          type: string
-          required: true
-        - name: time
-          description: 时间 2020-03
-          in: query
-          type: string
-          required: true
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/R'
-
-
-
-
   /industryClass/getDisData:
     post:
       tags:
@@ -349,6 +322,28 @@ paths:
           required: true
         - name: timeType
           description:  查询时间类型 1按年，2按月。
+          in: query
+          type: string
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+
+
+
+  /common/getIpAndPort:
+    post:
+      tags:
+        - 公用接口
+      summary: 获取动态ip和端口
+      produces:
+        - application/json
+      parameters:
+        - name: name
+          description: name值。获取ip和端口用ipAndPort
           in: query
           type: string
           required: true

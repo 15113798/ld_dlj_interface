@@ -82,7 +82,7 @@ public class IndustryClassController {
             dataEntity.setUserNum(totalUserNum.toString());
             dataEntity.setInstalledCapacity(totalInstalledCapacity.toString());
             dataEntity.setEleConMonth(totalEleConMonth.toString());
-            dataEntity.setIndustryCapUtil(commonService.calIndCapUtil(totalEleConMonth.toString(),totalInstalledCapacity.toString(),2));
+            dataEntity.setIndustryCapUtil(commonService.calIndCapUtil(totalEleConMonth.toString(),totalInstalledCapacity.toString(),1));
         }else{
             //按月的话就是查询指定月的数据
             //即上个月的数据
@@ -157,15 +157,15 @@ public class IndustryClassController {
             //得到占比
             BigDecimal oneProduction = totalOnePro.divide(totalPro,4, BigDecimal.ROUND_HALF_UP);
             if(oneProduction.compareTo(new BigDecimal(0)) == 1 && oneProduction.compareTo(new BigDecimal(0.01)) == -1){
-                oneProduction = new BigDecimal(0.01);
+                oneProduction = new BigDecimal(0.011);
             }
             BigDecimal twoProduction = totalTwoPro.divide(totalPro,4, BigDecimal.ROUND_HALF_UP);
-            if(twoProduction.compareTo(new BigDecimal(0)) == 1 && twoProduction.compareTo(new BigDecimal(0.01)) == -1){
-                twoProduction = new BigDecimal(0.01);
+           if(twoProduction.compareTo(new BigDecimal(0)) == 1 && twoProduction.compareTo(new BigDecimal(0.01)) == -1){
+                twoProduction = new BigDecimal(0.011);
             }
             BigDecimal threeProduction = totalThreePro.divide(totalPro,4, BigDecimal.ROUND_HALF_UP);
             if(threeProduction.compareTo(new BigDecimal(0)) == 1 && threeProduction.compareTo(new BigDecimal(0.01)) == -1){
-                threeProduction = new BigDecimal(0.01);
+                threeProduction = new BigDecimal(0.011);
             }
             BigDecimal residentProduction = new BigDecimal(1).subtract(oneProduction).subtract(twoProduction).subtract(threeProduction);
 

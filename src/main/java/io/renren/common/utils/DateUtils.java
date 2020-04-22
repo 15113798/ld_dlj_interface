@@ -178,6 +178,17 @@ public class DateUtils {
         return accDate;
     }
 
+    public static String getLastTwoMonth() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date); // 设置为当前时间
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 2); // 设置为上一个月
+        date = calendar.getTime();
+        String accDate = format.format(date);
+        return accDate;
+    }
+
 
 
 
@@ -186,6 +197,16 @@ public class DateUtils {
         SimpleDateFormat format = new SimpleDateFormat("yyyy");
         c.setTime(new Date());
         c.add(Calendar.YEAR, -1);
+        Date y = c.getTime();
+        String year = format.format(y);
+        return year;
+    }
+
+    public static String getLastTwoYear() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy");
+        c.setTime(new Date());
+        c.add(Calendar.YEAR, -2);
         Date y = c.getTime();
         String year = format.format(y);
         return year;

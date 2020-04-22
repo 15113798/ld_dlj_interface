@@ -205,7 +205,8 @@ public class ExcelReader {
 
         resultData.setIndustryCapUtil(calIndCapUtil(eleConMonthStr,zjrlStr,2));
         resultData.setRecordTime(time);
-        resultData.setChainRatio("10%");
+        resultData.setUserChainRatio("10%");
+        resultData.setUserYearToYear("10%");
 
         return resultData;
     }

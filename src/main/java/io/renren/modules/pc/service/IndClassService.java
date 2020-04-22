@@ -130,6 +130,16 @@ public class IndClassService {
         qw.groupBy("record_time");
         List<DljIndustryDataEntity>dataList = service.list(qw);
 
+        //遍历获取record_time然后截取前面的年份。如果重复就丢出去，没重复就加入到list中
+        List<String> yearList = new ArrayList<>();
+        for (DljIndustryDataEntity entity:dataList) {
+            String year = entity.getRecordTime().split("-")[0];
+            if(yearList.contains(year)){
+                continue;
+            }
+            yearList.add(year);
+        }
+
         String typeName = "";
 
         if(type.equals("1")){
@@ -150,14 +160,11 @@ public class IndClassService {
         List<String> category= new ArrayList<>();
         List<String> dataSerList = new ArrayList<>();
         BigDecimal totalBig = new BigDecimal(0);
-        for (DljIndustryDataEntity dataEntity : dataList){
-
-            String year = dataEntity.getRecordTime().split("-")[0];
-            category.add(year);
+        for (String yearStr: yearList){
             //然后通过行业和年份模糊查询可以获取到所有该行业该年的数据
             QueryWrapper fw = new QueryWrapper();
             fw.eq("industry_name",overName);
-            fw.like("record_time",year);
+            fw.like("record_time",yearStr);
             List<DljIndustryDataEntity>dList = service.list(fw);
             for (DljIndustryDataEntity dEntity:dList){
                 if(type.equals("1")){
@@ -177,7 +184,7 @@ public class IndClassService {
         List<Series> series = new ArrayList<>();//纵坐标
         series.add(new Series(typeName, "line",dataSerList));
 
-        EchartData data=new EchartData(legend, category, series);
+        EchartData data=new EchartData(legend, yearList, series);
 
         return data;
     }

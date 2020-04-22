@@ -341,6 +341,17 @@ paths:
       summary: 用户业扩报装投资建议等级
       produces:
         - application/json
+      parameters:
+        - name: industryId
+          description: 行业id
+          in: query
+          type: string
+          required: true
+        - name: timeType
+          description:  查询时间类型 1按年，2按月。
+          in: query
+          type: string
+          required: true
       responses:
         '200':
           schema:

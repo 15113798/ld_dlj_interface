@@ -69,8 +69,12 @@ public class DljIndustryDataEntity implements Serializable {
 	 */
 	private String recordTime;
 	/**
-	 * 环比
+	 * 用户量环比
 	 */
-	private String chainRatio;
+	private String userChainRatio;
+	/**
+	 * 用户量同比
+	 */
+	private String userYearToYear;
 
 }

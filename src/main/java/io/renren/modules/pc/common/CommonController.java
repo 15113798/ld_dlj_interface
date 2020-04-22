@@ -73,11 +73,67 @@ public class CommonController {
             return R.error(errorMsg);
         }else{
             List<DljIndustryDataEntity>list = (List<DljIndustryDataEntity>) map.get("list");
+            //拿到list，然后遍历list
+            for (DljIndustryDataEntity entity:list) {
+                //首先判断当前记录时间是不是在库里已经存在了
+                String recordTime = entity.getRecordTime();
+                QueryWrapper wrapper = new QueryWrapper();
+                wrapper.eq("record_time",recordTime);
+                List<DljIndustryDataEntity>queryList  = service.list(wrapper);
+                if(queryList.size() != 0){
+                    return R.error("该excel已存在，请确认数据时间");
+                }
+                //给用户量环比和同比赋值
+                String userCount = entity.getUserNum();
+                String indName = entity.getIndustryName();
+                String userChainRaotio = getUserChainRatio(indName,recordTime,userCount);
+                String userYearToYear = getUserYearToYear(indName,recordTime,userCount);
+                entity.setUserChainRatio(userChainRaotio);
+                entity.setUserYearToYear(userYearToYear);
+            }
             service.saveBatch(list);
             return R.ok();
         }
     }
 
+
+    public String getUserChainRatio(String indName,String time,String userCount){
+        //通过时间去获取当前数据的上一个月的数据
+        String lastTime = DateUtils.getLastMonthByTime(time);
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("record_time",lastTime);
+        queryWrapper.eq("industry_name",indName);
+        DljIndustryDataEntity entity= service.getOne(queryWrapper);
+        if(null == entity){
+            return "100%";
+        }
+        String lastTimeUserCount = entity.getUserNum();
+       if("0".equals(lastTimeUserCount)){
+           return "100%";
+       }
+        String userChainRatio = (new BigDecimal(userCount).subtract(new BigDecimal(lastTimeUserCount))).divide(new BigDecimal(lastTimeUserCount),4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).stripTrailingZeros().toPlainString()+"%";
+        return userChainRatio;
+    }
+
+
+    public String getUserYearToYear(String indName,String time,String userCount){
+
+        //通过时间去获取当前数据的上一个月的数据
+        String lastTime = DateUtils.getLastYearByTime(time)+"-"+time.split("-")[1];
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("record_time",lastTime);
+        queryWrapper.eq("industry_name",indName);
+        DljIndustryDataEntity entity= service.getOne(queryWrapper);
+        if(null == entity){
+            return "100%";
+        }
+        String lastTimeUserCount = entity.getUserNum();
+        if("0".equals(lastTimeUserCount)){
+            return "100%";
+        }
+        String userYearToYear = (new BigDecimal(userCount).subtract(new BigDecimal(lastTimeUserCount))).divide(new BigDecimal(lastTimeUserCount),4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).stripTrailingZeros().toPlainString()+"%";
+        return userYearToYear;
+    }
 
 
 

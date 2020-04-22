@@ -14,6 +14,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -166,6 +167,23 @@ public class DateUtils {
     }
 
 
+    public static String getLastMonthByTime(String time) {
+        DateFormat format2 =  new SimpleDateFormat("yyyy-MM");
+        Date date = new Date();
+        try{
+            date = format2.parse(time);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM");
+        c.add(Calendar.MONTH, -1);
+        String lastMonthTime = format.format(c.getTime());
+
+        return lastMonthTime;
+    }
+
 
     public static String getLastMonth() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
@@ -190,6 +208,21 @@ public class DateUtils {
     }
 
 
+    public static String getLastYearByTime(String time) {
+        DateFormat format2 =  new SimpleDateFormat("yyyy");
+        Date date = new Date();
+        try{
+            date = format2.parse(time);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        SimpleDateFormat format =  new SimpleDateFormat("yyyy");
+        c.add(Calendar.YEAR, -1);
+        String lastYearTime = format.format(c.getTime());
+        return lastYearTime;
+    }
 
 
     public static String getLastYear() {

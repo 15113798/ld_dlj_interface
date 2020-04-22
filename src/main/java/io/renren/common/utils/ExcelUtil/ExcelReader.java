@@ -64,10 +64,9 @@ public class ExcelReader {
         String errorMsg = "";
 
         try {
-            String time = "2020-04";
             //获取文件名，从前往后截取。判断文件名是否符合标准
-            String year = getIsYearBol(fileName);
-            if(null == year){
+            String time = getIsYearBol(fileName);
+            if(null == time){
                 map.put("errorMsg","当前文件名不规范，请按照规范输入");
                 map.put("list",null);
                 return map;
@@ -207,10 +206,13 @@ public class ExcelReader {
         double assYear = cell.getNumericCellValue();
         String assYearStr = String.valueOf((new Double(assYear)));
         resultData.setAssYear(assYearStr);
-
+        //行业利用率
         resultData.setIndustryCapUtil(calIndCapUtil(eleConMonthStr,zjrlStr,2));
+        //记录时间
         resultData.setRecordTime(time);
+        //用户量环比
         resultData.setUserChainRatio("10%");
+        //用户量同比
         resultData.setUserYearToYear("10%");
 
         return resultData;
@@ -247,7 +249,7 @@ public class ExcelReader {
     private static String getIsYearBol(String name) {
         try{
             String[] parsePatterns = {"yyyyMM"};
-            String str = name.substring(17,24);
+            String str = name.substring(17,23);
             Date date = DateUtils.parseDate(str,parsePatterns);
 
             SimpleDateFormat formater = new SimpleDateFormat();
@@ -261,5 +263,7 @@ public class ExcelReader {
         }
         return null;
     }
+
+
 
 }

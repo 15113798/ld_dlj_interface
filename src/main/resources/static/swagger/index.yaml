@@ -355,6 +355,29 @@ paths:
 
 
 
+  /common/upload:
+    post:
+      tags:
+        - 公用接口
+      summary: 数据导入上传文件
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - name: file
+          description: 文件
+          in: formData
+          type: file
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/R'
+
+
+
+
 
 
 

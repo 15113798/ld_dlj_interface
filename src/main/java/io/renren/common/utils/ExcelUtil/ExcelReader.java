@@ -4,6 +4,7 @@ import io.renren.modules.generator.entity.DljIndustryDataEntity;
 import io.renren.modules.generator.entity.DljIndustryEntity;
 import io.renren.modules.generator.service.DljIndustryDataService;
 import io.renren.modules.pc.common.CommonService;
+import org.apache.http.client.utils.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -12,6 +13,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sun.util.calendar.BaseCalendar;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -21,9 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @Component
@@ -56,31 +57,34 @@ public class ExcelReader {
      * @param fileName 要读取的Excel文件所在路径
      * @return 读取结果列表，读取失败时返回null
      */
-    public static List<DljIndustryDataEntity> readExcel(String fileName,String time) {
+    public static Map<String,Object> readExcel(FileInputStream inputStream,String fileName) throws Exception {
 
         Workbook workbook = null;
-        FileInputStream inputStream = null;
+        Map<String,Object> map = new HashMap<String,Object>();
+        String errorMsg = "";
 
         try {
+            String time = "2020-04";
+            //获取文件名，从前往后截取。判断文件名是否符合标准
+            String year = getIsYearBol(fileName);
+            if(null == year){
+                map.put("errorMsg","当前文件名不规范，请按照规范输入");
+                map.put("list",null);
+                return map;
+            }
             // 获取Excel后缀名
             String fileType = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
-            // 获取Excel文件
-            File excelFile = new File(fileName);
-            if (!excelFile.exists()) {
-                //return null;
-            }
 
-            // 获取Excel工作簿
-            inputStream = new FileInputStream(excelFile);
             workbook = getWorkbook(inputStream, fileType);
 
             // 读取excel中的数据
             List<DljIndustryDataEntity> list = parseExcel(workbook,time);
-            return list;
+            map.put("list",list);
+            return map;
         } catch (Exception e) {
-            System.out.println("解析Excel失败，文件名：" + fileName + " 错误信息：" + e.getMessage());
-            //logger.warning("解析Excel失败，文件名：" + fileName + " 错误信息：" + e.getMessage());
-            //return null;
+            map.put("errorMsg","未知异常。请联系管理员");
+            map.put("list",null);
+            return map;
         } finally {
             try {
                 if (null != workbook) {
@@ -90,11 +94,12 @@ public class ExcelReader {
                     inputStream.close();
                 }
             } catch (Exception e) {
-                //logger.warning("关闭数据流出错！错误信息：" + e.getMessage());
-                //return null;
+                //throw new Exception("关闭数据流出错！错误信息：" + e.getMessage());
+                map.put("errorMsg","未知异常。请联系管理员");
+                map.put("list",null);
+                return map;
             }
         }
-        return null;
     }
 
     /**
@@ -238,5 +243,23 @@ public class ExcelReader {
         return "0.00%";
     }
 
+
+    private static String getIsYearBol(String name) {
+        try{
+            String[] parsePatterns = {"yyyyMM"};
+            String str = name.substring(17,24);
+            Date date = DateUtils.parseDate(str,parsePatterns);
+
+            SimpleDateFormat formater = new SimpleDateFormat();
+            formater.applyPattern("yyyy-MM");
+            if(date == null){
+                return null;
+            }
+            return formater.format(date);
+        }catch (Exception e){
+
+        }
+        return null;
+    }
 
 }

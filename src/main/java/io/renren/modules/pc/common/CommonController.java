@@ -1,6 +1,7 @@
 package io.renren.modules.pc.common;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.renren.common.exception.RRException;
 import io.renren.common.utils.DateUtils;
 import io.renren.common.utils.ExcelUtil.ExcelReader;
 import io.renren.common.utils.R;
@@ -16,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +48,36 @@ public class CommonController {
         String value = entity.getValue();
         return R.ok().put("data",value);
     }
+
+
+
+
+
+    //上传文件
+    @RequestMapping("/upload")
+    public R upload(@RequestParam("file") MultipartFile file)throws Exception {
+        if (file.isEmpty()) {
+            throw new RRException("上传文件不能为空");
+        }
+        String originalFilename = file.getOriginalFilename();
+        String type = file.getContentType();
+        //originalFilename = UUID.randomUUID().toString()+originalFilename;
+        System.out.println("目标文件名称："+originalFilename+",目标文件类型："+type);
+
+
+        //获取到流和时间。调用工具类方法
+        InputStream is = file.getInputStream();
+        Map<String,Object>map = ExcelReader.readExcel((FileInputStream) is,originalFilename);
+        if(null == map.get("list")){
+            String errorMsg = (String) map.get("errorMsg");
+            return R.error(errorMsg);
+        }else{
+            List<DljIndustryDataEntity>list = (List<DljIndustryDataEntity>) map.get("list");
+            service.saveBatch(list);
+            return R.ok();
+        }
+    }
+
 
 
 

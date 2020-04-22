@@ -155,17 +155,17 @@ public class IndustryClassController {
             //BigDecimal testTotal = totalOnePro.add(totalTwoPro).add(totalThreePro).add(totalResidentPro);
 
             //得到占比
-            BigDecimal oneProduction = totalOnePro.divide(totalPro,4, BigDecimal.ROUND_HALF_UP);
-            if(oneProduction.compareTo(new BigDecimal(0)) == 1 && oneProduction.compareTo(new BigDecimal(0.01)) == -1){
-                oneProduction = new BigDecimal(0.011);
+            BigDecimal oneProduction = totalOnePro.divide(totalPro,3, BigDecimal.ROUND_HALF_UP);
+            if(oneProduction.compareTo(new BigDecimal(0)) == 1 && oneProduction.compareTo(new BigDecimal(0.001)) == -1){
+                oneProduction = new BigDecimal(0.001);
             }
-            BigDecimal twoProduction = totalTwoPro.divide(totalPro,4, BigDecimal.ROUND_HALF_UP);
-           if(twoProduction.compareTo(new BigDecimal(0)) == 1 && twoProduction.compareTo(new BigDecimal(0.01)) == -1){
-                twoProduction = new BigDecimal(0.011);
+            BigDecimal twoProduction = totalTwoPro.divide(totalPro,3, BigDecimal.ROUND_HALF_UP);
+           if(twoProduction.compareTo(new BigDecimal(0)) == 1 && twoProduction.compareTo(new BigDecimal(0.001)) == -1){
+                twoProduction = new BigDecimal(0.001);
             }
-            BigDecimal threeProduction = totalThreePro.divide(totalPro,4, BigDecimal.ROUND_HALF_UP);
-            if(threeProduction.compareTo(new BigDecimal(0)) == 1 && threeProduction.compareTo(new BigDecimal(0.01)) == -1){
-                threeProduction = new BigDecimal(0.011);
+            BigDecimal threeProduction = totalThreePro.divide(totalPro,3, BigDecimal.ROUND_HALF_UP);
+            if(threeProduction.compareTo(new BigDecimal(0)) == 1 && threeProduction.compareTo(new BigDecimal(0.001)) == -1){
+                threeProduction = new BigDecimal(0.001);
             }
             BigDecimal residentProduction = new BigDecimal(1).subtract(oneProduction).subtract(twoProduction).subtract(threeProduction);
 

@@ -182,13 +182,13 @@ public class BigUserIndExpanController {
     public String getLylDf(String lyl){
         String df = "";
         double a = Double.valueOf(lyl);
-        if(a<=0.1){
+        if(a<=10){
             df = "20";
-        }else if(a <= 0.2){
+        }else if(a <= 20){
             df = "40";
-        }else if(a<= 0.3){
+        }else if(a<= 30){
             df = "60";
-        }else if(a<= 0.4){
+        }else if(a<= 40){
             df = "80";
         }else{
             df = "100";

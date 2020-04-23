@@ -74,15 +74,15 @@ public class CommonController {
         }else{
             List<DljIndustryDataEntity>list = (List<DljIndustryDataEntity>) map.get("list");
             //拿到list，然后遍历list
+            //判断数据否在库里已经存在了
+            String recordTime = list.get(0).getRecordTime();
+            QueryWrapper wrapper = new QueryWrapper();
+            wrapper.eq("record_time",recordTime);
+            DljIndustryDataEntity queryEntity  = service.getOne(wrapper);
+            if(queryEntity != null){
+                return R.error("该excel已存在，请确认数据时间");
+            }
             for (DljIndustryDataEntity entity:list) {
-                //首先判断当前记录时间是不是在库里已经存在了
-                String recordTime = entity.getRecordTime();
-                QueryWrapper wrapper = new QueryWrapper();
-                wrapper.eq("record_time",recordTime);
-                List<DljIndustryDataEntity>queryList  = service.list(wrapper);
-                if(queryList.size() != 0){
-                    return R.error("该excel已存在，请确认数据时间");
-                }
                 //给用户量环比和同比赋值
                 String userCount = entity.getUserNum();
                 String indName = entity.getIndustryName();

@@ -78,20 +78,30 @@ public class CommonController {
             String recordTime = list.get(0).getRecordTime();
             QueryWrapper wrapper = new QueryWrapper();
             wrapper.eq("record_time",recordTime);
-            DljIndustryDataEntity queryEntity  = service.getOne(wrapper);
-            if(queryEntity != null){
-                return R.error("该excel已存在，请确认数据时间");
+            List<DljIndustryDataEntity> queryist  = service.list(wrapper);
+            if(queryist != null && queryist.size() != 0){
+                for (DljIndustryDataEntity entity:list) {
+                    //给用户量环比和同比赋值
+                    String userCount = entity.getUserNum();
+                    String indName = entity.getIndustryName();
+                    String userChainRaotio = getUserChainRatio(indName,recordTime,userCount);
+                    String userYearToYear = getUserYearToYear(indName,recordTime,userCount);
+                    entity.setUserChainRatio(userChainRaotio);
+                    entity.setUserYearToYear(userYearToYear);
+                }
+                service.updateBatchById(list);
+            }else{
+                for (DljIndustryDataEntity entity:list) {
+                    //给用户量环比和同比赋值
+                    String userCount = entity.getUserNum();
+                    String indName = entity.getIndustryName();
+                    String userChainRaotio = getUserChainRatio(indName,recordTime,userCount);
+                    String userYearToYear = getUserYearToYear(indName,recordTime,userCount);
+                    entity.setUserChainRatio(userChainRaotio);
+                    entity.setUserYearToYear(userYearToYear);
+                }
+                service.saveBatch(list);
             }
-            for (DljIndustryDataEntity entity:list) {
-                //给用户量环比和同比赋值
-                String userCount = entity.getUserNum();
-                String indName = entity.getIndustryName();
-                String userChainRaotio = getUserChainRatio(indName,recordTime,userCount);
-                String userYearToYear = getUserYearToYear(indName,recordTime,userCount);
-                entity.setUserChainRatio(userChainRaotio);
-                entity.setUserYearToYear(userYearToYear);
-            }
-            service.saveBatch(list);
             return R.ok();
         }
     }

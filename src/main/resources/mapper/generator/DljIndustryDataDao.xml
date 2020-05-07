@@ -21,5 +21,10 @@
         <result property="userYearToYear" column="user_year_to_year"/>
     </resultMap>
 
+    
+    <select id="queryListOrderByLyl" parameterType="java.lang.String" resultMap="dljIndustryDataMap">
+
+        select *,replace (industry_cap_util,'%','') as cnlyl from dlj_industry_data where record_time=#{time} order by CAST(cnlyl as DECIMAL) desc
+    </select>
 
 </mapper>

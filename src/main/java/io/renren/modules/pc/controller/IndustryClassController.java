@@ -185,12 +185,12 @@ public class IndustryClassController {
     public R getMonthCapUtil(@RequestParam Map<String, Object> params){
         //数据统一是以查上月为准
         String month = DateUtils.getLastMonth();
-        //通过行业id获取行业名称
+        /*//通过行业id获取行业名称
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("record_time",month);
-        wrapper.orderByDesc("industry_cap_util");
+        wrapper.orderByDesc("industry_cap_util");*/
 
-        List<DljIndustryDataEntity> list= service.list(wrapper);
+        List<DljIndustryDataEntity> list= service.queryListOrderByLyl(month);
         List<DljIndustryDataEntity> dataList = new ArrayList<>();
 
 

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -106,7 +107,7 @@ public class ExcelReader {
      * @param workbook Excel工作簿对象
      * @return 解析结果
      */
-    private static List<DljIndustryDataEntity> parseExcel(Workbook workbook,String time) {
+    private static List<DljIndustryDataEntity> parseExcel(Workbook workbook,String time) throws ParseException {
         //List<ExcelDataVO> resultDataList = new ArrayList<>();
         // 解析sheet
         List<DljIndustryDataEntity> resultDataList = new ArrayList<>();
@@ -156,7 +157,7 @@ public class ExcelReader {
      * @param row 行数据
      * @return 解析后的行数据对象，行数据错误时返回null
      */
-    private static DljIndustryDataEntity convertRowToData(Row row,String time) {
+    private static DljIndustryDataEntity convertRowToData(Row row,String time) throws ParseException {
         DljIndustryDataEntity resultData = new DljIndustryDataEntity();
 
         Cell cell;
@@ -207,7 +208,7 @@ public class ExcelReader {
         String assYearStr = String.valueOf((new Double(assYear)));
         resultData.setAssYear(assYearStr);
         //行业利用率
-        resultData.setIndustryCapUtil(calIndCapUtil(eleConMonthStr,zjrlStr,2));
+        resultData.setIndustryCapUtil(calIndCapUtil(eleConMonthStr,zjrlStr,1,time));
         //记录时间
         resultData.setRecordTime(time);
         //用户量环比
@@ -220,16 +221,35 @@ public class ExcelReader {
 
 
 
+    public static int getDaysOfMonth(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
+
+    public static int getDaysOfYear(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
+    }
+
+
     /*
         计算本月行业产能利用率
         入参：用电量，装机量。
      */
-    public static String calIndCapUtil(String yd, String zj, int yearOrMonth){
+    public static String calIndCapUtil(String yd, String zj, int yearOrMonth,String time) throws ParseException {
         int timeCount = 0;
+
         if(yearOrMonth == 1){
-            timeCount = 24*30*365;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+            int yearDay = getDaysOfYear(sdf.parse(time));
+            timeCount = 24 * yearDay;
         }else{
-            timeCount = 24*30;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+            int monthDay = getDaysOfMonth(sdf.parse(time));
+            timeCount = 24 * monthDay;
         }
 
         if(!zj.equals("0")){

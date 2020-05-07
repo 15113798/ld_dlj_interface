@@ -4,6 +4,8 @@ import io.renren.modules.generator.entity.DljIndustryDataEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 行业数据表
  * 
@@ -13,5 +15,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface DljIndustryDataDao extends BaseMapper<DljIndustryDataEntity> {
+
+    List<DljIndustryDataEntity>queryListOrderByLyl(String time);
 	
 }

@@ -8,7 +8,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+
+import static io.renren.common.utils.ExcelUtil.ExcelReader.getDaysOfMonth;
+import static io.renren.common.utils.ExcelUtil.ExcelReader.getDaysOfYear;
 
 @Service
 public class CommonService {
@@ -20,12 +25,16 @@ public class CommonService {
         计算本月行业产能利用率
         入参：用电量，装机量。
      */
-    public static String calIndCapUtil(String yd, String zj, int yearOrMonth){
+    public static String calIndCapUtil(String yd, String zj, int yearOrMonth,String time) throws ParseException {
         int timeCount = 0;
         if(yearOrMonth == 1){
-            timeCount = 24*30*365;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+            int yearDay = getDaysOfYear(sdf.parse(time));
+            timeCount = 24 * yearDay;
         }else{
-            timeCount = 24*30;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+            int monthDay = getDaysOfMonth(sdf.parse(time));
+            timeCount = 24 * monthDay;
         }
 
         if(!zj.equals("0")){

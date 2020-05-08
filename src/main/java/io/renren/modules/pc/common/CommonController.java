@@ -1,6 +1,7 @@
 package io.renren.modules.pc.common;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.renren.common.exception.RRException;
 import io.renren.common.utils.DateUtils;
 import io.renren.common.utils.ExcelUtil.ExcelReader;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -147,6 +149,31 @@ public class CommonController {
 
 
 
+    //修复行业利用率
+    //获取动态ip和端口
+        @RequestMapping("/xfLyl")
+    public R xfLyl(@RequestParam Map<String, Object> params) throws ParseException {
+        QueryWrapper wrapper = new QueryWrapper();
+        List<DljIndustryDataEntity>list = service.list();
+        for (int i = 0; i < list.size(); i++) {
+            DljIndustryDataEntity entity = list.get(i);
+            String eleConMonthStr = entity.getEleConMonth();
+            String zjrlStr = entity.getInstalledCapacity();
+            String time = entity.getRecordTime();
+            //查看一下之前的行业利用率
+            String indCapUtil = entity.getIndustryCapUtil();
+            //修复后的行业利用率
+            String newIndCapUtil = ExcelReader.calIndCapUtil(eleConMonthStr,zjrlStr,2,time);
+            entity.setIndustryCapUtil(newIndCapUtil);
+        }
+
+        boolean b = service.updateBatchById(list);
+        if(b == true){
+            return R.ok();
+        }else{
+            return R.error();
+        }
+    }
 
 
 

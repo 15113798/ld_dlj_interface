@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.*;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +54,7 @@ public class BigUserIndExpanController {
 
 
     @RequestMapping("/getInvSug")
-    public R getInvSug(@RequestParam Map<String, Object> params){
+    public R getInvSug(@RequestParam Map<String, Object> params) throws ParseException {
         String industryId = String.valueOf(params.get("industryId"));
         String timeType = String.valueOf(params.get("timeType"));
         InvSugEntity sugEntity = new InvSugEntity();
@@ -93,7 +94,7 @@ public class BigUserIndExpanController {
                 totalIndustryCapUtil = totalIndustryCapUtil.add(new BigDecimal(induCapUtil.split("%")[0]));
             }
 
-            String indCapUtil = commonService.calIndCapUtil(totalEleConMonth.toString(),totalInstalledCapacity.toString(),1);
+            String indCapUtil = commonService.calIndCapUtil(totalEleConMonth.toString(),totalInstalledCapacity.toString(),1,time);
             String lylDf = getLylDf(indCapUtil.split("%")[0]);
             //用电增长率
 
@@ -148,7 +149,7 @@ public class BigUserIndExpanController {
 
             String installedCap = dEntity.getInstalledCapacity();
             String eleConMonth = dEntity.getEleConMonth();
-            String indCapUtil = commonService.calIndCapUtil(eleConMonth.toString(),installedCap.toString(),2);
+            String indCapUtil = dEntity.getIndustryCapUtil();
             String lylDf = getLylDf(indCapUtil.split("%")[0]);
 
 

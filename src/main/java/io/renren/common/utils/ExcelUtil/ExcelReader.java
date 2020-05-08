@@ -208,7 +208,7 @@ public class ExcelReader {
         String assYearStr = String.valueOf((new Double(assYear)));
         resultData.setAssYear(assYearStr);
         //行业利用率
-        resultData.setIndustryCapUtil(calIndCapUtil(eleConMonthStr,zjrlStr,1,time));
+        resultData.setIndustryCapUtil(calIndCapUtil(eleConMonthStr,zjrlStr,2,time));
         //记录时间
         resultData.setRecordTime(time);
         //用户量环比

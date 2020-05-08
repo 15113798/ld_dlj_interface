@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.*;
 
 @RestController
@@ -38,7 +39,7 @@ public class IndustryClassController {
 
 
     @RequestMapping("/getData")
-    public R getData(@RequestParam Map<String, Object> params){
+    public R getData(@RequestParam Map<String, Object> params) throws ParseException {
         String  industryId = String.valueOf(params.get("industryId"));
         String  timeType = String.valueOf(params.get("timeType"));
 
@@ -82,7 +83,7 @@ public class IndustryClassController {
             dataEntity.setUserNum(totalUserNum.toString());
             dataEntity.setInstalledCapacity(totalInstalledCapacity.toString());
             dataEntity.setEleConMonth(totalEleConMonth.toString());
-            dataEntity.setIndustryCapUtil(commonService.calIndCapUtil(totalEleConMonth.toString(),totalInstalledCapacity.toString(),1));
+            dataEntity.setIndustryCapUtil(commonService.calIndCapUtil(totalEleConMonth.toString(),totalInstalledCapacity.toString(),1,time));
         }else{
             //按月的话就是查询指定月的数据
             //即上个月的数据
@@ -99,8 +100,15 @@ public class IndustryClassController {
             dataWrapper.eq("record_time",lastMonth);
             dataWrapper.eq("industry_name",indEntity.getOverName());
             List<DljIndustryDataEntity> dataList = service.list(dataWrapper);
-            if(dataList != null){
+            if(dataList != null && dataList.size() != 0){
                 dataEntity =  dataList.get(0);
+            }else{
+                dataEntity.setIndustryCapUtil("0.00%");
+                dataEntity.setUserChainRatio("0.00%");
+                dataEntity.setUserNum("0");
+                dataEntity.setEleConMonth("0");
+                dataEntity.setInstalledCapacity("0");
+                dataEntity.setUserYearToYear("0.00");
             }
         }
 
@@ -192,7 +200,6 @@ public class IndustryClassController {
 
         List<DljIndustryDataEntity> list= service.queryListOrderByLyl(month);
         List<DljIndustryDataEntity> dataList = new ArrayList<>();
-
 
         int count = 0 ;
         for (int i = 0; i < list.size(); i++) {
